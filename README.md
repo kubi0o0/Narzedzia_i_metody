@@ -1,2 +1,2 @@
 # Narzedzia_i_metody
-Zadanka
+Jakub Wyszyński 57356, Filip Singh
