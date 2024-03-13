@@ -1,0 +1,40 @@
+import numpy as np
+
+
+def graj_na_maszynie(maszyna, m, s):
+    return np.random.normal(m[maszyna], s[maszyna])
+
+
+def wybierz_maszynę(j, a, b):
+    best_own_machine = np.argmax(a[:, j])
+    best_global_machine = np.argmax(np.mean(a, axis=1))
+    return np.random.choice([best_own_machine, best_global_machine])
+
+
+N = 100  # Liczba jednorękich bandytów
+Tmax = 10000  # Maksymalna liczba kroków pętli
+M = 100  # Liczba gości
+
+m = np.random.uniform(0, 1, size=N)  # Średnie wygrane
+s = np.random.uniform(0.1, 1, size=N)  # Odchylenia standardowe
+
+
+a = np.zeros((N, M))  # Średnie wygrane
+b = np.ones((N, M))  # Odchylenia standardowe
+
+
+for t in range(Tmax):
+    for j in range(M):
+        
+        selected_machine = wybierz_maszynę(j, a, b)
+
+        
+        win = graj_na_maszynie(selected_machine, m, s)
+
+       
+        a[selected_machine, j] = (a[selected_machine, j] * b[selected_machine, j] + win) / (b[selected_machine, j] + 1)
+        b[selected_machine, j] += 1
+
+
+wygrane_hordy = np.sum(a)
+print("Sumaryczna wygrana całej hordy:", wygrane_hordy)
