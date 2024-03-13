@@ -1,0 +1,50 @@
+import numpy as np
+
+
+# Funkcja symulująca grę na jednej maszynie
+def graj_na_maszynie(maszyna, m, s):
+    return np.random.normal(m[maszyna], s[maszyna])
+
+
+# Funkcja wybierająca maszynę dla danego gościa
+def wybierz_maszynę(j, a, b):
+    best_own_machine = np.argmax(a[:, j])
+    best_global_machine = np.argmax(np.mean(a, axis=1))
+    return np.random.choice([best_own_machine, best_global_machine])
+
+
+# Parametry kasyna
+N = 100  # Liczba jednorękich bandytów
+Tmax = 10000  # Maksymalna liczba kroków pętli
+M = 100  # Liczba gości
+
+# Inicjalizacja rozkładów prawdopodobieństwa dla każdej maszyny
+m = np.random.uniform(0, 1, size=N)  # Średnie wygrane
+s = np.random.uniform(0.1, 1, size=N)  # Odchylenia standardowe
+
+# Inicjalizacja empirycznych średnich i odchyleń standardowych dla każdej maszyny i każdego gościa
+a = np.zeros((N, M))  # Średnie wygrane
+b = np.ones((N, M))  # Odchylenia standardowe
+
+# Pętla symulacji
+for t in range(Tmax):
+    for j in range(M):
+        # Wybór maszyny przez gościa j na podstawie zasad opisanych w punkcie 3 (a) i (b)
+        selected_machine = wybierz_maszynę(j, a, b)
+
+        # Symulacja gry na wybranej maszynie
+        win = graj_na_maszynie(selected_machine, m, s)
+
+        # Aktualizacja empirycznych średnich a oraz odchyleń standardowych b
+        a[selected_machine, j] = (a[selected_machine, j] * b[selected_machine, j] + win) / (b[selected_machine, j] + 1)
+        b[selected_machine, j] += 1
+
+# Po zakończeniu symulacji obliczamy sumaryczną wygraną całej hordy
+wygrane_hordy = np.sum(a)
+print("Sumaryczna wygrana całej hordy:", wygrane_hordy)
+
+# Wyświetlenie wyników
+najlepsza_maszyna_globalnie = np.argmax(np.mean(a, axis=1))
+srednia_wygrana = np.mean(a[najlepsza_maszyna_globalnie])
+print("Najlepsza maszyna (globalnie):", najlepsza_maszyna_globalnie)
+print("Średnia wygrana na tej maszynie:", srednia_wygrana)
