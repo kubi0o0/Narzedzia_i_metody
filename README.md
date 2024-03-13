@@ -1,2 +1,2 @@
 # Narzedzia_i_metody
-Jakub Wyszyński 57356, Filip Singh
+Jakub Wyszyński 57356, Filip Singh 59362
