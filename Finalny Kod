@@ -46,5 +46,5 @@ print("Sumaryczna wygrana całej hordy:", wygrane_hordy)
 # Wyświetlenie wyników
 najlepsza_maszyna_globalnie = np.argmax(np.mean(a, axis=1))
 srednia_wygrana = np.mean(a[najlepsza_maszyna_globalnie])
-print("Najlepsza maszyna (globalnie):", najlepsza_maszyna_globalnie)
+print("Najlepsza maszyna:", najlepsza_maszyna_globalnie)
 print("Średnia wygrana na tej maszynie:", srednia_wygrana)
